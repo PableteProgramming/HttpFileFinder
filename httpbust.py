@@ -20,6 +20,7 @@
 
 import requests
 import colorama
+import sys
 
 def RequestHttp(url):
     r= requests.get(url)
@@ -42,3 +43,20 @@ print(colorama.Fore.RED+'''
              | |   | | |  __/ | |   | | | | | (_| |  __/ |
              \_|   |_|_|\___| \_|   |_|_| |_|\__,_|\___|_|
 '''+colorama.Style.RESET_ALL)
+
+if len(sys.argv)<2:
+    print(colorama.Fore.BLUE+"Please specify the url to scan !"+colorama.Style.RESET_ALL)
+    sys.exit(1)
+else:
+    url= sys.argv[1]
+
+fileh= open("list.txt","r")
+lines= fileh.read().splitlines()
+
+
+for line in lines:
+    code= RequestHttp(url+"/"+line)
+    if code == 404:
+        print(colorama.Fore.RED+url+"/"+line+" : "+str(code)+colorama.Style.RESET_ALL)
+    elif code== 200:
+        print(colorama.Fore.GREEN+url+"/"+line+" : "+str(code)+colorama.Style.RESET_ALL)
